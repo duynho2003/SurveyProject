@@ -1,0 +1,95 @@
+﻿@model IEnumerable<BE.Models.User>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Class)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Specification)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Section)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JoinDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
+            </th>
+            <th>
+                Action
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Class)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Specification)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Section)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JoinDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+            <ul class="navbar-nav flex-grow-1">
+            @{if (item.Active == 1)
+                {
+                <li>
+                @* <a asp-action="Edit" asp-route-id="@item.Id">Update</a> | *@
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> 
+                </li>
+                }
+                else if (item.Active == 0)
+                {
+                <li>
+                    <a asp-action="ApproveActive" asp-route-id="@item.Id">Approve</a>
+                    <a asp-action="DenyActive" asp-route-id="@item.Id">Deny</a>
+                </li>
+                }
+                else
+                {
+                    <th>You have been banned!</th>
+                }
+            }
+            </ul>
+                @* <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
