@@ -30,9 +30,10 @@ namespace BE.Controllers
         public async Task<IActionResult> Pending()
         {
             var list = await _context.Users.Where(x => x.Active == 0).ToListAsync();
+            ViewBag.Count = list.Count;
             if (list.Count == 0)
             {
-                return RedirectToAction("Index");
+                ViewBag.Msg = "Nothing";
             }
             return View(list);
         }

@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "Pending";
 }
-<h1>Pending</h1>
-
+<h1>Approval</h1>
+<h6 class="text-danger">You have @ViewBag.Count member requests.</h6>
 <table class="table">
     <thead>
         <tr>
@@ -71,7 +71,7 @@
                 {
                 <li>
                     <a asp-action="ApproveActive" asp-route-id="@item.Id">Approve</a>
-                    <a asp-action="DenyActive" asp-route-id="@item.Id">Deny</a>
+                    <a asp-action="DenyActive" asp-route-id="@item.Id">Ignore</a>
                 </li>
                 }
             }
