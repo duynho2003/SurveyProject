@@ -22,14 +22,19 @@ namespace BE.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-              return _context.Users != null ? 
-                          View(await _context.Users.ToListAsync()) :
-                          Problem("Entity set 'SurveyProjectContext.Users'  is null.");
+            return _context.Users != null ? 
+                  View(await _context.Users.Where(u => u.Active == 1).ToListAsync()) :
+                  Problem("Entity set 'SurveyProjectContext.Users' is null.");
         }
+
         public async Task<IActionResult> Pending()
         {
-            var emptyList = new List<User>();
-            return View(emptyList);
+            var list = await _context.Users.Where(x => x.Active == 0).ToListAsync();
+            if (list.Count == 0)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(list);
         }
 
         // GET: Users/Details/5

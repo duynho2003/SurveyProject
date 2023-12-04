@@ -4,16 +4,11 @@
     ViewData["Title"] = "Pending";
 }
 
-<h1>Pending</h1>
-
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
@@ -37,7 +32,7 @@
                 @Html.DisplayNameFor(model => model.Role)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Active)
+                Action
             </th>
             <th></th>
         </tr>
@@ -47,9 +42,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
@@ -73,12 +65,29 @@
                 @Html.DisplayFor(modelItem => item.Role)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Active)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <ul class="navbar-nav flex-grow-1">
+            @{if (item.Active == 1)
+                {
+                <li>
+                @* <a asp-action="Edit" asp-route-id="@item.Id">Update</a> | *@
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> 
+                </li>
+                }
+                else if (item.Active == 0)
+                {
+                <li>
+                    <a asp-action="ApproveActive" asp-route-id="@item.Id">Approve</a>
+                    <a asp-action="DenyActive" asp-route-id="@item.Id">Deny</a>
+                </li>
+                }
+                else
+                {
+                    <th>You have been banned!</th>
+                }
+            }
+            </ul>
+                @* <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
             </td>
         </tr>
 }
