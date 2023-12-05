@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace BE.Models;
@@ -26,6 +27,7 @@ public partial class User
     [Required]
     public string? Role { get; set; }
     [Required]
+    [DisplayName("Status")]
     public int? Active { get; set; }
 
     public virtual ICollection<Award> Awards { get; set; } = new List<Award>();

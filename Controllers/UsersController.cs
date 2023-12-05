@@ -19,14 +19,30 @@ namespace BE.Controllers
             _context = context;
         }
 
-        // GET: Users
-        public async Task<IActionResult> Index()
+        // GET: Users //Da duyet hien staff/student active = 1
+        public async Task<IActionResult> Index(string? usearch)
+        {
+            var model = await _context.Users.Where(u => u.Active == 1 && u.Role == "Staff" || u.Role == "Student").ToListAsync();
+            if (usearch == null)
+            {
+                return View(model);
+            }
+            else
+            {
+                var model1 = model!.Where(m => m.UserName!.Contains(usearch!) || m.Email!.Contains(usearch!) || m.NumberCode!.Contains(usearch!));
+                return View(model1);
+            }
+        }
+        
+        // GET: Users //Da duyet hien admin active = 1
+        public async Task<IActionResult> Admin()
         {
             return _context.Users != null ? 
-                  View(await _context.Users.Where(u => u.Active == 1).ToListAsync()) :
+                View(await _context.Users.Where(u => u.Active == 1 && u.Role == "Admin").ToListAsync()) :
                   Problem("Entity set 'SurveyProjectContext.Users' is null.");
         }
 
+        //Chua duyet hien user active = 0
         public async Task<IActionResult> Pending()
         {
             var list = await _context.Users.Where(x => x.Active == 0).ToListAsync();
