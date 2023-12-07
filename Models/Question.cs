@@ -7,7 +7,7 @@ namespace BE.Models;
 public partial class Question
 {
     public int Id { get; set; }
-
+    [DisplayName("Survey title")]
     public int? SurveyId { get; set; }
     [DisplayName("Question")]
     public string? Title { get; set; }

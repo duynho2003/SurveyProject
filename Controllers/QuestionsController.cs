@@ -47,7 +47,7 @@ namespace BE.Controllers
         // GET: Questions/Create
         public IActionResult Create()
         {
-            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Title", "Title");
+            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Id", "Title");
             return View();
         }
 
@@ -64,7 +64,7 @@ namespace BE.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Title", "Title", question.SurveyId);
+            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Id", "Title", question.SurveyId);
             return View(question);
         }
 
@@ -81,7 +81,7 @@ namespace BE.Controllers
             {
                 return NotFound();
             }
-            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Title", "Title", question.SurveyId);
+            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Id", "Title", question.SurveyId);
             return View(question);
         }
 
@@ -117,7 +117,7 @@ namespace BE.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Title", "Title", question.SurveyId);
+            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Id", "Title", question.SurveyId);
             return View(question);
         }
 
