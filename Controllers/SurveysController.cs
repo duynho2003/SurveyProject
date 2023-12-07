@@ -9,32 +9,51 @@ using BE.Models;
 
 namespace BE.Controllers
 {
-    public class QuestionsController : Controller
+    public class SurveysController : Controller
     {
         private readonly SurveyProjectContext _context;
 
-        public QuestionsController(SurveyProjectContext context)
+        public SurveysController(SurveyProjectContext context)
         {
             _context = context;
         }
 
-        // GET: Questions
+        // GET: Surveys
         public async Task<IActionResult> Index()
         {
-            var surveyProjectContext = _context.Questions.Include(q => q.Survey);
-            return View(await surveyProjectContext.ToListAsync());
+            return _context.Surveys != null ? 
+                        View(await _context.Surveys.ToListAsync()) :
+                        Problem("Entity set 'SurveyProjectContext.Surveys'  is null.");
         }
 
-        // GET: Questions/Details/5
+        // GET: Surveys/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Questions == null)
+            if (id == null || _context.Surveys == null)
             {
                 return NotFound();
             }
 
-            var question = await _context.Questions
-                .Include(q => q.Survey)
+            var survey = await _context.Surveys
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (survey == null)
+            {
+                return NotFound();
+            }
+
+            return View(survey);
+        }
+
+        // GET: Surveys/ViewQuestions/5
+        public async Task<IActionResult> Question(int? id)
+        {
+            if (id == null || _context.Surveys == null)
+            {
+                return NotFound();
+            }
+
+            var question = await _context.Surveys
+                .Include(q => q.Questions)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (question == null)
             {
@@ -44,55 +63,52 @@ namespace BE.Controllers
             return View(question);
         }
 
-        // GET: Questions/Create
+        // GET: Surveys/Create
         public IActionResult Create()
         {
-            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Title", "Title");
             return View();
         }
 
-        // POST: Questions/Create
+        // POST: Surveys/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SurveyId,Title,CorrectAnswer")] Question question)
+        public async Task<IActionResult> Create([Bind("Id,Title,UserType,Form,UserPost,CreatedAt,EndAt")] Survey survey)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(question);
+                _context.Add(survey);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Title", "Title", question.SurveyId);
-            return View(question);
+            return View(survey);
         }
 
-        // GET: Questions/Edit/5
+        // GET: Surveys/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Questions == null)
+            if (id == null || _context.Surveys == null)
             {
                 return NotFound();
             }
 
-            var question = await _context.Questions.FindAsync(id);
-            if (question == null)
+            var survey = await _context.Surveys.FindAsync(id);
+            if (survey == null)
             {
                 return NotFound();
             }
-            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Title", "Title", question.SurveyId);
-            return View(question);
+            return View(survey);
         }
 
-        // POST: Questions/Edit/5
+        // POST: Surveys/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SurveyId,Title,CorrectAnswer")] Question question)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,UserType,Form,UserPost,CreatedAt,EndAt")] Survey survey)
         {
-            if (id != question.Id)
+            if (id != survey.Id)
             {
                 return NotFound();
             }
@@ -101,12 +117,12 @@ namespace BE.Controllers
             {
                 try
                 {
-                    _context.Update(question);
+                    _context.Update(survey);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!QuestionExists(question.Id))
+                    if (!SurveyExists(survey.Id))
                     {
                         return NotFound();
                     }
@@ -117,51 +133,49 @@ namespace BE.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SurveyId"] = new SelectList(_context.Surveys, "Title", "Title", question.SurveyId);
-            return View(question);
+            return View(survey);
         }
 
-        // GET: Questions/Delete/5
+        // GET: Surveys/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Questions == null)
+            if (id == null || _context.Surveys == null)
             {
                 return NotFound();
             }
 
-            var question = await _context.Questions
-                .Include(q => q.Survey)
+            var survey = await _context.Surveys
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (question == null)
+            if (survey == null)
             {
                 return NotFound();
             }
 
-            return View(question);
+            return View(survey);
         }
 
-        // POST: Questions/Delete/5
+        // POST: Surveys/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Questions == null)
+            if (_context.Surveys == null)
             {
-                return Problem("Entity set 'SurveyProjectContext.Questions'  is null.");
+                return Problem("Entity set 'SurveyProjectContext.Surveys'  is null.");
             }
-            var question = await _context.Questions.FindAsync(id);
-            if (question != null)
+            var survey = await _context.Surveys.FindAsync(id);
+            if (survey != null)
             {
-                _context.Questions.Remove(question);
+                _context.Surveys.Remove(survey);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool QuestionExists(int id)
+        private bool SurveyExists(int id)
         {
-          return (_context.Questions?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Surveys?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
