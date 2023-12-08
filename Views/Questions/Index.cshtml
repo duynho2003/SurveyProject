@@ -4,12 +4,18 @@
     ViewData["Title"] = "Questions";
 }
 
-<h1>Questions</h1>
+<nav class="navbar default-layout">
+    <div class="navbar-menu-wrapper d-flex align-items-top">
+        <h1>Questions</h1>
+    </div>
+</nav>
 
 <p>
-    <a asp-action="Create">Create New Questions</a>
+    <a asp-action="Create" class="btn btn-outline-success"><span class="btn-label"><i class="fa fa-plus"></i></span>Create New Questions</a>
 </p>
-<table class="table">
+
+<div class="table-responsive mt-1">
+    <table class="table select-table">
     <thead>
         <tr>
             <th>
@@ -37,11 +43,12 @@
                 @Html.DisplayFor(modelItem => item.Survey.Title)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-success"><span class="btn-label"><i class="fa fa-eye-slash"></i></span>View Question</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning"><span class="btn-label"><i class="fa fa-edit"></i></span>Edit</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger"><span class="btn-label"><i class="fa fa-trash"></i></span>Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+</div>

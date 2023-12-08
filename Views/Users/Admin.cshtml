@@ -1,15 +1,16 @@
 ﻿@model IEnumerable<BE.Models.User>
 
 @{
-    ViewData["Title"] = "Admin";
+    ViewData["Title"] = "Admins";
 }
 
-<h1>Admin</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<nav class="navbar default-layout">
+    <div class="navbar-menu-wrapper d-flex align-items-top">
+        <h1>Admins</h1>
+    </div>
+</nav>
+<div class="table-responsive mt-1">
+<table class="table select-table">
     <thead>
         <tr>
             <th>
@@ -85,9 +86,11 @@
                     </td>
                     <td>
                     <ul class="navbar-nav flex-grow-1">
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-labeled btn-success"><span class="btn-label"><i class="fa fa-info"></i>Info</span></a>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-labeled btn-info"><span class="btn-label"><i class="fa fa-edit"></i>Edit</span></a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-labeled btn-danger"><span class="btn-label"><i class="fa fa-trash"></i>Delete</span></a>
+                        <li>
+                        <a asp-action="Details" asp-route-id="@item.Id" type="button" class="btn btn-outline-success"><span class="btn-label"><i class="fa fa-info"></i></span>Info</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" type="button" class="btn btn-outline-warning"><span class="btn-label"><i class="fa fa-edit"></i></span>Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" type="button" class="btn btn-outline-danger"><span class="btn-label"><i class="fa fa-trash"></i></span>Delete</a>
+                        </li>
                     </ul>
                     </td>
             </tr>
@@ -95,3 +98,4 @@
         }
     </tbody>
 </table>
+</div>

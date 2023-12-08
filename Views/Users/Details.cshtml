@@ -65,15 +65,13 @@
             @{
                 if (Model.Active == 1)
                 {
-                    <li>
-                        Approved
-                    </li>
+                    <label class="badge badge-success">Approved</label>
                 }
             }
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary me-2">Edit</a>
+    <a asp-action="Index" class="btn btn-light">Back to List</a>
 </div>

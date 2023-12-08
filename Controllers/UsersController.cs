@@ -22,7 +22,7 @@ namespace BE.Controllers
         // GET: Users //Da duyet hien staff/student active = 1
         public async Task<IActionResult> Index(string? usearch)
         {
-            var model = await _context.Users.Where(u => u.Active == 1 && u.Role == "Staff" || u.Role == "Student").ToListAsync();
+            var model = await _context.Users.Where(u => u.Active == 1 && u.Role == "Staff" || u.Active == 1 && u.Role == "Student").ToListAsync();
             if (usearch == null)
             {
                 return View(model);
@@ -195,7 +195,7 @@ namespace BE.Controllers
             {
                 user.Active = 1;
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Pending));
             }
             return View(user);
         }
@@ -212,7 +212,7 @@ namespace BE.Controllers
             {
                 user.Active = -1;
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Pending));
             }
             return View(user);
         }

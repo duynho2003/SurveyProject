@@ -1,23 +1,25 @@
 ﻿@model IEnumerable<BE.Models.User>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Users";
 }
 
 <nav class="navbar default-layout">
-    <h1>User</h1>
-<div class="navbar-menu-wrapper d-flex align-items-top">
-    <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-            <form class="search-form">
+    <div class="navbar-menu-wrapper d-flex align-items-top">
+    <h1>Users</h1>
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <form class="search-form">
                 <i class="icon-search"></i>
                 <input type="search" name="usearch" class="form-control" placeholder="Search Here" title="Search here">
-            </form>
-        </li>
-    </ul>
-</div>
+                </form>
+            </li>
+        </ul>
+    </div>
 </nav>
-<table class="table">
+
+<div class="table-responsive mt-1">
+<table class="table select-table">
     <thead>
         <tr>
             <th>
@@ -90,8 +92,8 @@
             @{if (item.Active == 1)
                 {
                 <li>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-labeled btn-success"><span class="btn-label"><i class="fa fa-edit"></i></span>Info</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-labeled btn-danger"><span class="btn-label"><i class="fa fa-trash"></i>Delete</span></a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-success"><span class="btn-label"><i class="fa fa-info"></i></span>Info</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger"><span class="btn-label"><i class="fa fa-trash"></i>Delete</span></a>
                 </li>
                 }
             }
@@ -104,3 +106,4 @@
         }
     </tbody>
 </table>
+</div>
