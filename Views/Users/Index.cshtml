@@ -3,10 +3,20 @@
 @{
     ViewData["Title"] = "Index";
 }
-<form>
-    <input type="text" name="usearch" placeholder="Enter user name" />
-    <input type="submit" value="Search" class="btn-info" />
-</form>
+
+<nav class="navbar default-layout">
+    <h1>User</h1>
+<div class="navbar-menu-wrapper d-flex align-items-top">
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+            <form class="search-form">
+                <i class="icon-search"></i>
+                <input type="search" name="usearch" class="form-control" placeholder="Search Here" title="Search here">
+            </form>
+        </li>
+    </ul>
+</div>
+</nav>
 <table class="table">
     <thead>
         <tr>
@@ -80,8 +90,8 @@
             @{if (item.Active == 1)
                 {
                 <li>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> 
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-labeled btn-success"><span class="btn-label"><i class="fa fa-edit"></i></span>Info</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-labeled btn-danger"><span class="btn-label"><i class="fa fa-trash"></i>Delete</span></a>
                 </li>
                 }
             }
