@@ -45,16 +45,16 @@ namespace BE.Controllers
         }
 
         // GET: Surveys/ViewQuestions/5
-        public async Task<IActionResult> Question(int? id)
+        public async Task<IActionResult> Question(int? id )
         {
             if (id == null || _context.Surveys == null)
             {
                 return NotFound();
             }
 
-            var question = await _context.Surveys
-                .Include(q => q.Questions)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var question = await _context.Questions.FirstOrDefaultAsync(q => q.SurveyId == id);
+            var options = await _context.Options.FirstOrDefaultAsync(q => q.QuestionId == id);
+            
             if (question == null)
             {
                 return NotFound();
