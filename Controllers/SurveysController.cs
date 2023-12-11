@@ -45,22 +45,41 @@ namespace BE.Controllers
         }
 
         // GET: Surveys/ViewQuestions/5
-        public async Task<IActionResult> Question(int? id )
+        public async Task<IActionResult> Question(int? id)
         {
-            if (id == null || _context.Surveys == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var question = await _context.Questions.FirstOrDefaultAsync(q => q.SurveyId == id);
-            var options = await _context.Options.FirstOrDefaultAsync(q => q.QuestionId == id);
-            
-            if (question == null)
+            //var question = await _context.Questions.SingleOrDefaultAsync(q => q.SurveyId == id);
+            //var options = await _context.Options.SingleOrDefaultAsync(o => o.QuestionId.Equals(question!.Id));
+
+            var questions = await _context.Questions.Where(q => q.SurveyId == id).ToListAsync();
+            var options = await _context.Options.Where(o => questions.Any(q => q.Id == o.QuestionId)).ToListAsync();
+
+            if (questions == null)
             {
                 return NotFound();
             }
 
-            return View(question);
+            //var viewModels = new QuestionOptionsViewModel();
+
+            //viewModels.Question = question;
+            //viewModels.Options = options;
+
+            var viewModels = new List<QuestionOptionsViewModel>();
+
+            foreach (var question in questions)
+            {
+                var viewModel = new QuestionOptionsViewModel();
+                viewModel.Question = question;
+                viewModel.Options = options;
+                viewModels.Add(viewModel);
+            }
+
+            // Trả về view với danh sách các view model
+            return View(viewModels);
         }
 
         // GET: Surveys/Create

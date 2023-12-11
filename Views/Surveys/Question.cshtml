@@ -1,54 +1,36 @@
-﻿@model BE.Models.Survey
+﻿@model BE.Models.QuestionOptionsViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Question";
 }
 
-<h1>Details</h1>
+<h1>Question</h1>
 
 <div>
-    <h4>Survey</h4>
+    <h4>Question</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Question!.Title)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Question!.Title)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserType)
+            @Html.DisplayNameFor(model => model.Options.Title)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UserType)
+            @Html.DisplayFor(model => model.Options!.Title)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Form)
+            @Html.DisplayNameFor(model => model.Question!.CorrectAnswer)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Form)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserPost)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UserPost)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EndAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EndAt)
+            @Html.DisplayFor(model => model.Question!.CorrectAnswer)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary me-2">Edit</a>
+@*     <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary me-2">Edit</a> *@
     <a asp-action="Index" class="btn btn-light">Back to List</a>
 </div>
