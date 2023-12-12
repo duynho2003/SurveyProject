@@ -4,7 +4,13 @@ namespace BE.Models
 {
     public class QuestionOptionsViewModel
     {
-        public Question? Question { get; set; }
-        public Option? Options { get; set; } = new Option();
+        public List<Question> Questions { get; set; }
+        public List<Option> Options { get; set; }
+
+        public QuestionOptionsViewModel(List<Question> questions, List<Option> options)
+        {
+            Questions = questions;
+            Options = options;
+        }
     }
 }

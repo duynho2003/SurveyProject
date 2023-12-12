@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BE.Models;
+using NuGet.Versioning;
+using Microsoft.Extensions.Options;
 
 namespace BE.Controllers
 {
@@ -52,34 +54,23 @@ namespace BE.Controllers
                 return NotFound();
             }
 
-            //var question = await _context.Questions.SingleOrDefaultAsync(q => q.SurveyId == id);
-            //var options = await _context.Options.SingleOrDefaultAsync(o => o.QuestionId.Equals(question!.Id));
+            var questions = await _context.Questions
+                .Include(q => q.Options)
+                .Where(q => q.SurveyId == id)
+                .ToListAsync();
 
-            var questions = await _context.Questions.Where(q => q.SurveyId == id).ToListAsync();
-            var options = await _context.Options.Where(o => questions.Any(q => q.Id == o.QuestionId)).ToListAsync();
-
-            if (questions == null)
+            if (questions == null || !questions.Any())
             {
                 return NotFound();
             }
 
-            //var viewModels = new QuestionOptionsViewModel();
+            var options = await _context.Options.ToListAsync();
 
-            //viewModels.Question = question;
-            //viewModels.Options = options;
+            // Create and populate the view model
+            var viewModel = new QuestionOptionsViewModel(questions, options);
 
-            var viewModels = new List<QuestionOptionsViewModel>();
-
-            foreach (var question in questions)
-            {
-                var viewModel = new QuestionOptionsViewModel();
-                viewModel.Question = question;
-                viewModel.Options = options;
-                viewModels.Add(viewModel);
-            }
-
-            // Trả về view với danh sách các view model
-            return View(viewModels);
+            // Return the view with the view model
+            return View(viewModel);
         }
 
         // GET: Surveys/Create
@@ -104,55 +95,77 @@ namespace BE.Controllers
             return View(survey);
         }
 
-        // GET: Surveys/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int surveyId)
         {
-            if (id == null || _context.Surveys == null)
-            {
-                return NotFound();
-            }
+            // Lấy thông tin survey
+            var survey = await _context.Surveys.FindAsync(surveyId);
 
-            var survey = await _context.Surveys.FindAsync(id);
-            if (survey == null)
-            {
-                return NotFound();
-            }
-            return View(survey);
+            // Lấy thông tin các câu hỏi
+            var questions = await _context.Questions
+                .Where(q => q.SurveyId == surveyId)
+                .Include(q => q.Options)
+                .ToListAsync();
+
+            // Hiển thị thông tin survey và các câu hỏi
+            ViewData["Survey"] = survey;
+            ViewData["Questions"] = questions;
+
+            return View();
         }
 
-        // POST: Surveys/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,UserType,Form,UserPost,CreatedAt,EndAt")] Survey survey)
+        public async Task<IActionResult> Edit(int surveyId, [Bind("title,description,questions")] Survey survey)
         {
-            if (id != survey.Id)
+            // Xử lý yêu cầu chỉnh sửa
+            survey.Id = surveyId;
+
+            // Kiểm tra xem danh sách câu hỏi có chứa bất kỳ mục nào hay không
+            if (survey.Questions == null || survey.Questions.Count == 0)
             {
-                return NotFound();
+                // Trả về mã phản hồi 400 Bad Request
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            // Lưu thông tin survey
+            await _context.Surveys.UpdateAsync(survey);
+
+            // Lưu thông tin các câu hỏi
+            foreach (var question in survey.Questions)
             {
-                try
+                // Lưu thông tin câu hỏi
+                question.Id = question.Id;
+                question.SurveyId = surveyId;
+
+                // Lưu thông tin các tùy chọn
+                var options = question.Options.ToList();
+
+                // Xóa các tùy chọn bị xóa
+                foreach (var optionId in question.DeletedOptions)
                 {
-                    _context.Update(survey);
-                    await _context.SaveChangesAsync();
+                    options.Remove(options.Find(x => x.Id == optionId));
                 }
-                catch (DbUpdateConcurrencyException)
+
+                // Thêm các tùy chọn mới
+                foreach (var option in question.NewOptions)
                 {
-                    if (!SurveyExists(survey.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    options.Add(new Option { Id = Guid.NewGuid(), QuestionId = question.Id, Text = option.Text });
                 }
-                return RedirectToAction(nameof(Index));
+
+                // Cập nhật các tùy chọn đã chỉnh sửa
+                foreach (var option in question.UpdatedOptions)
+                {
+                    options.FirstOrDefault(x => x.Id == option.Id).Text = option.Text;
+                }
+
+                // Lưu thông tin tùy chọn
+                await _context.Options.ReplaceRangeAsync(options);
             }
-            return View(survey);
+
+            // Lưu cơ sở dữ liệu
+            await _context.SaveChangesAsync();
+
+            // Chuyển hướng về trang survey
+            return RedirectToRoute("surveys", new { surveyId = surveyId });
         }
 
         // GET: Surveys/Delete/5

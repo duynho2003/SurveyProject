@@ -14,5 +14,4 @@ public partial class Option
     public int? QuestionId { get; set; }
 
     public virtual Question? Question { get; set; }
-
 }
