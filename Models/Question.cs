@@ -15,7 +15,4 @@ public partial class Question
     public virtual ICollection<Option> Options { get; set; } = new List<Option>();
 
     public virtual Survey? Survey { get; set; }
-
-    public List<Option>? UpdatedOptions { get; set; }
-    public List<int> DeletedOptions { get; set; }
 }

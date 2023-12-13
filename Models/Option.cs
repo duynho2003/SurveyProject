@@ -5,6 +5,8 @@ namespace BE.Models;
 
 public partial class Option
 {
+    public bool IsSelected;
+
     public int Id { get; set; }
 
     public string? Title { get; set; }

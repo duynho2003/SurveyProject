@@ -95,78 +95,17 @@ namespace BE.Controllers
             return View(survey);
         }
 
-        public async Task<IActionResult> Edit(int surveyId)
-        {
-            // Lấy thông tin survey
-            var survey = await _context.Surveys.FindAsync(surveyId);
+        //public async Task<IActionResult> Create([Bind("Id,Title,UserType,Form,UserPost,CreatedAt,EndAt")] Survey survey)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(survey);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(survey);
+        //}
 
-            // Lấy thông tin các câu hỏi
-            var questions = await _context.Questions
-                .Where(q => q.SurveyId == surveyId)
-                .Include(q => q.Options)
-                .ToListAsync();
-
-            // Hiển thị thông tin survey và các câu hỏi
-            ViewData["Survey"] = survey;
-            ViewData["Questions"] = questions;
-
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(int surveyId, [Bind("title,description,questions")] Survey survey)
-        {
-            // Xử lý yêu cầu chỉnh sửa
-            survey.Id = surveyId;
-
-            // Kiểm tra xem danh sách câu hỏi có chứa bất kỳ mục nào hay không
-            if (survey.Questions == null || survey.Questions.Count == 0)
-            {
-                // Trả về mã phản hồi 400 Bad Request
-                return BadRequest();
-            }
-
-            // Lưu thông tin survey
-            await _context.Surveys.UpdateAsync(survey);
-
-            // Lưu thông tin các câu hỏi
-            foreach (var question in survey.Questions)
-            {
-                // Lưu thông tin câu hỏi
-                question.Id = question.Id;
-                question.SurveyId = surveyId;
-
-                // Lưu thông tin các tùy chọn
-                var options = question.Options.ToList();
-
-                // Xóa các tùy chọn bị xóa
-                foreach (var optionId in question.DeletedOptions)
-                {
-                    options.Remove(options.Find(x => x.Id == optionId));
-                }
-
-                // Thêm các tùy chọn mới
-                foreach (var option in question.NewOptions)
-                {
-                    options.Add(new Option { Id = Guid.NewGuid(), QuestionId = question.Id, Text = option.Text });
-                }
-
-                // Cập nhật các tùy chọn đã chỉnh sửa
-                foreach (var option in question.UpdatedOptions)
-                {
-                    options.FirstOrDefault(x => x.Id == option.Id).Text = option.Text;
-                }
-
-                // Lưu thông tin tùy chọn
-                await _context.Options.ReplaceRangeAsync(options);
-            }
-
-            // Lưu cơ sở dữ liệu
-            await _context.SaveChangesAsync();
-
-            // Chuyển hướng về trang survey
-            return RedirectToRoute("surveys", new { surveyId = surveyId });
-        }
 
         // GET: Surveys/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -209,5 +148,133 @@ namespace BE.Controllers
         {
           return (_context.Surveys?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        //public async Task<IActionResult> Edit(int surveyId)
+        //{
+        //    // Lấy thông tin survey
+        //    //var survey = await _context.Surveys.FindAsync(surveyId);
+
+        //    // Lấy thông tin các câu hỏi
+        //    var questions = await _context.Questions
+        //      .Where(q => q.SurveyId == surveyId)
+        //      .Include(q => q.Options)
+        //      .ToListAsync();
+
+        //    var survey = await _context.Surveys
+        //  .Include(s => s.Questions)
+        //  .ThenInclude(q => q.Options)
+        //  .Where(s => s.Id == surveyId).ToListAsync();
+
+        //    // Hiển thị thông tin survey và các câu hỏi
+        //    ViewData["Survey"] = survey;
+        //    ViewData["Questions"] = questions;
+
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> Edit(int surveyId, IEnumerable<QuestionViewModel> questions)
+        //{
+        //    // Lấy thông tin survey
+        //    var survey = await _context.Surveys
+        //      .Include(s => s.Questions)
+        //      .ThenInclude(q => q.Options)
+        //      .Where(s => s.Id == surveyId)
+        //      .FirstOrDefaultAsync();
+
+        //    // Kiểm tra xem survey có tồn tại hay không
+        //    if (survey == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    // Cập nhật các câu hỏi và tùy chọn
+        //    foreach (var question in questions)
+        //    {
+        //        foreach (var option in question.Options)
+        //        {
+        //            //question.survey = survey;
+        //            // Kiểm tra xem checkbox tương ứng có được chọn hay không
+        //            if (Request.Form.ContainsKey("option-" + option.Id))
+        //            {
+        //                option.IsSelected = true;
+        //            }
+        //            else
+        //            {
+        //                option.IsSelected = false;
+        //            }
+        //        }
+
+        //        _context.Entry(question.Questions).State = EntityState.Modified;
+        //    }
+
+        //    await _context.SaveChangesAsync();
+
+        //    return RedirectToAction("Index");
+        //}
+
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            // Check if the survey exists
+            var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == id);
+            if (survey == null)
+            {
+                return NotFound();
+            }
+
+            // Get the questions for the survey
+            var questions = survey.Questions;
+
+            // Display the edit form
+            return View(survey);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Survey survey, List<Question> questions)
+        {
+            // Check if the survey exists
+            var existingSurvey = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == id);
+            if (existingSurvey == null)
+            {
+                return NotFound();
+            }
+
+            // Update the survey details
+            existingSurvey.Title = survey.Title;
+
+            // Update the questions
+            foreach (var question in questions)
+            {
+                var existingQuestion = existingSurvey.Questions.FirstOrDefault(q => q.Id == question.Id);
+                if (existingQuestion == null)
+                {
+                    existingQuestion = new Question();
+                    existingSurvey.Questions.Add(existingQuestion);
+                }
+                existingQuestion.Title = question.Title;
+                existingQuestion.CorrectAnswer = question.CorrectAnswer;
+
+                // Update the options
+                foreach (var option in question.Options)
+                {
+                    var existingOption = existingQuestion.Options.FirstOrDefault(o => o.Id == option.Id);
+                    if (existingOption == null)
+                    {
+                        existingOption = new Option();
+                        existingQuestion.Options.Add(existingOption);
+                    }
+                    existingOption.Title = option.Title;
+                    existingOption.Answer = option.Answer;
+                }
+            }
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
