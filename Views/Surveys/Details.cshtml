@@ -1,14 +1,15 @@
 ﻿@model BE.Models.Survey
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Info Survey";
 }
 
-<h1>Details</h1>
-
+<nav class="navbar default-layout">
+    <div class="navbar-menu-wrapper d-flex align-items-top">
+        <h1>Info Survey</h1>
+    </div>
+</nav>
 <div>
-    <h4>Survey</h4>
-    <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Title)

@@ -276,5 +276,28 @@ namespace BE.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult TakeSurvey(int id)
+        {
+            var survey = _context.Surveys.Include(s => s.Questions).ThenInclude(q => q.Options).FirstOrDefault(s => s.Id == id);
+            if (survey == null)
+            {
+                return NotFound();
+            }
+            return View(survey);
+        }
+
+        [HttpPost]
+        public IActionResult TakeSurvey(int id, List<int> answerIds)
+        {
+            var survey = _context.Surveys.Find(id);
+            if (survey == null)
+            {
+                return NotFound();
+            }
+
+            // Process answers and save results
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

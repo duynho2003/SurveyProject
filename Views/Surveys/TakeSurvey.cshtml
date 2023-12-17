@@ -1,0 +1,50 @@
+﻿@* @model BE.Models.Survey
+
+@{
+    ViewData["Title"] = "Take Survey";
+}
+
+<h1>Take Survey: @Model.Title</h1>
+
+@if (Model != null)
+{
+    <p>@Model.Description</p>
+
+    <form asp-action="SubmitSurvey" method="post">
+        @foreach (var question in Model.Questions)
+        {
+            <h3>@question.Title</h3>
+
+            @switch (question.Type)
+            {
+                case QuestionType.MultipleChoice:
+                    @foreach (var option in question.Options)
+                    {
+                        <label>
+                            <input type="radio" name="@question.Id" value="@option.Id" />
+                            @option.Title
+                        </label>
+                    }
+                    break;
+                case QuestionType.SingleChoice:
+                    @foreach (var option in question.Options)
+                    {
+                        <label>
+                            <input type="radio" name="@question.Id" value="@option.Id" />
+                            @option.Title
+                        </label>
+                    }
+                    break;
+                case QuestionType.Text:
+                    <textarea name="@question.Id" rows="5"></textarea>
+                    break;
+            }
+        }
+        <button type="submit">Submit Survey</button>
+    </form>
+}
+else
+{
+    <p>Survey not found!</p>
+}
+ *@

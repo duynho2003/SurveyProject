@@ -3,9 +3,11 @@
 @{
     ViewData["Title"] = "Question";
 }
-
-<h1>Question</h1>
-
+<nav class="navbar default-layout">
+    <div class="navbar-menu-wrapper d-flex align-items-top">
+        <h1>Info Question</h1>
+    </div>
+</nav>
 @foreach (var question in Model.Questions)
 {
     <div>
@@ -16,7 +18,7 @@
             <ul>
                 @foreach (var option in question.Options)
                 {
-                    <li>@option.Title</li>
+                    <li>@option.Answer</li>
                 }
             </ul>
         </div>
