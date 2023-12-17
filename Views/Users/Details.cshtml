@@ -1,14 +1,15 @@
 ﻿@model BE.Models.User
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Information";
 }
 
-<h1>Details</h1>
-
+<nav class="navbar default-layout">
+    <div class="navbar-menu-wrapper d-flex align-items-top">
+        <h1>Information</h1>
+    </div>
+</nav>
 <div>
-    <h4>User</h4>
-    <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.UserName)
