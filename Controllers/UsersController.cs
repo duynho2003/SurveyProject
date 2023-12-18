@@ -35,11 +35,21 @@ namespace BE.Controllers
         }
         
         // GET: Users //Da duyet hien admin active = 1
-        public async Task<IActionResult> Admin()
+        public async Task<IActionResult> Admin(string? asearch)
         {
-            return _context.Users != null ? 
-                View(await _context.Users.Where(u => u.Active == 1 && u.Role == "Admin").ToListAsync()) :
-                  Problem("Entity set 'SurveyProjectContext.Users' is null.");
+            var model = await _context.Users.Where(u => u.Active == 1 && u.Role == "Admin").ToListAsync();
+            if (asearch == null)
+            {
+                return View(model);
+            }
+            else
+            {
+                var model1 = model!.Where(m => m.UserName!.Contains(asearch!) || m.Email!.Contains(asearch!) || m.NumberCode!.Contains(asearch!));
+                return View(model1);
+            }
+            //return _context.Users != null ? 
+            //    View(await _context.Users.Where(u => u.Active == 1 && u.Role == "Admin").ToListAsync()) :
+            //      Problem("Entity set 'SurveyProjectContext.Users' is null.");
         }
 
         //Chua duyet hien user active = 0
