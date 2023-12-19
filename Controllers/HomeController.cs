@@ -14,7 +14,6 @@ namespace BE.Controllers
             _context = context;
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             var counts = new { UserCount = _context.Users.Count(x => x.Role == "Staff" || x.Role == "Student"), AdminCount = _context.Users.Count(x => x.Role == "Admin"), PendingCount = _context.Users.Count(y => y.Active == 0), SurveyCount = _context.Surveys.Count(), QuestionCount = _context.Questions.Count() };

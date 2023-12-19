@@ -298,7 +298,7 @@
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="menu-icon mdi mdi-account-circle-outline"></i>
-              <span class="menu-title">User Manager</span>
+              <span class="menu-title">User Management</span>
               <i class="menu-arrow"></i> 
             </a>
             <div class="collapse" id="ui-basic">
@@ -312,12 +312,12 @@
           @* Surveys Pages *@
           <li class="nav-item nav-category">Surveys</li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+            <a class="nav-link" data-bs-toggle="collapse" href="#form-surveys" aria-expanded="false" aria-controls="form-elements">
               <i class="menu-icon mdi mdi-card-text-outline"></i>
-              <span class="menu-title">Surveys</span>
+              <span class="menu-title">Survey Management</span>
               <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="form-elements">
+            <div class="collapse" id="form-surveys">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="Surveys" asp-action="Index">Surveys</a></li>
                 <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="Questions" asp-action="Index">Questions</a></li>
@@ -326,38 +326,39 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
-              <i class="menu-icon mdi mdi-layers-outline"></i>
-              <span class="menu-title">Ko biet</span>
+            <a class="nav-link" data-bs-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="reports">
+              <i class="menu-icon mdi mdi-chart-bar"></i>
+              <span class="menu-title">Reports</span>
               <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="icons">
+            <div class="collapse" id="reports">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/icons/mdi.html">Ko biet</a></li>
+                <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Charts">Surveys</a></li>
+                <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Charts">Filled Survey?</a></li>
               </ul>
             </div>
           </li>
           @* Category Pages *@
-          <li class="nav-item nav-category">Pages</li>
+          <li class="nav-item nav-category">Others</li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="menu-title">
+            <a class="nav-link" data-bs-toggle="collapse" href="#news" aria-expanded="false" aria-controls="menu-title">
               <i class="menu-icon mdi mdi-newspaper"></i>
               <span class="menu-title">News</span>
               <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="charts">
+            <div class="collapse" id="news">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="" asp-action="">News</a></li>
               </ul>
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
+              <a class="nav-link" data-bs-toggle="collapse" href="#faqs" aria-expanded="false" aria-controls="faqs">
               <i class="menu-icon mdi mdi-frequently-asked-questions"></i>
               <span class="menu-title">FAQS</span>
               <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="tables">
+            <div class="collapse" id="faqs">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="" asp-action="">FAQS</a></li>
               </ul>
@@ -394,7 +395,7 @@
     <script src="~/assets/vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page -->
-    <script src="~/assets/vendors/chart.js/Chart.min.js"></script>
+  <script src="~/assets/vendors/chart.js/Chart.min.js"></script>
   <script src="~/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
   <script src="~/assets/vendors/progressbar.js/progressbar.min.js"></script>
 
