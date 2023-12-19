@@ -9,20 +9,30 @@ namespace BE.Controllers
     {
         private readonly SurveyProjectContext _context;
         private readonly ILogger<HomeController> _logger;
-        public HomeController(SurveyProjectContext context)
+        public HomeController(SurveyProjectContext context, ILogger<HomeController> logger)
         {
             _context = context;
+            _logger = logger;
         }
-
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
 
         public IActionResult Index()
         {
             var counts = new { UserCount = _context.Users.Count(x => x.Role == "Staff" || x.Role == "Student"), AdminCount = _context.Users.Count(x => x.Role == "Admin"), PendingCount = _context.Users.Count(y => y.Active == 0), SurveyCount = _context.Surveys.Count(), QuestionCount = _context.Questions.Count() };
             return View(counts);
+        }
+        public IActionResult Charts()
+        {
+            return View();
+        }
+        [HttpPost]
+        public List<object> GetList() 
+        {
+            List<object> data = new List<object>();
+            List<string?> labels = _context.Surveys.Select(x => x.Title).ToList();
+            List<int?> totals = _context.Surveys.Select(t => t.UserPost).ToList();
+            data.Add(labels);
+            data.Add(totals);
+            return data;
         }
 
         public IActionResult Privacy()
