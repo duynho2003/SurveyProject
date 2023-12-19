@@ -1,50 +1,39 @@
-﻿@* @model BE.Models.Survey
+﻿@model BE.Models.Survey
 
 @{
-    ViewData["Title"] = "Take Survey";
+    ViewData["Title"] = "Take Survey: " + Model.Title;
 }
 
 <h1>Take Survey: @Model.Title</h1>
 
 @if (Model != null)
 {
-    <p>@Model.Description</p>
+    @* <p>@Model.Description</p> *@
 
-    <form asp-action="SubmitSurvey" method="post">
+    <form asp-action="TakeSurvey" method="post">
+        <input type="hidden" asp-for="Id" />
+
         @foreach (var question in Model.Questions)
         {
             <h3>@question.Title</h3>
 
-            @switch (question.Type)
+            @foreach (var option in question.Options)
             {
-                case QuestionType.MultipleChoice:
-                    @foreach (var option in question.Options)
-                    {
-                        <label>
+                <div class="col-sm-5">
+                    <div class="form-check">
+                        <label class="form-check-label">
                             <input type="radio" name="@question.Id" value="@option.Id" />
-                            @option.Title
+                            @option.Answer
                         </label>
-                    }
-                    break;
-                case QuestionType.SingleChoice:
-                    @foreach (var option in question.Options)
-                    {
-                        <label>
-                            <input type="radio" name="@question.Id" value="@option.Id" />
-                            @option.Title
-                        </label>
-                    }
-                    break;
-                case QuestionType.Text:
-                    <textarea name="@question.Id" rows="5"></textarea>
-                    break;
+                    </div>
+                </div>
+                
             }
         }
-        <button type="submit">Submit Survey</button>
+        <button type="submit" class="btn btn-primary me-2">Submit Survey</button>
     </form>
 }
 else
 {
     <p>Survey not found!</p>
 }
- *@

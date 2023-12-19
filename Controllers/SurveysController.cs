@@ -283,6 +283,11 @@ namespace BE.Controllers
             {
                 return NotFound();
             }
+            // Check if survey is closed (kiểm tra nếu khảo sát hết giờ => Đóng)
+            if (survey.EndAt < DateTime.Now)
+            {
+                return View("Closed", survey); // Use a dedicated "Closed" view to inform users
+            }
             return View(survey);
         }
 
@@ -293,6 +298,12 @@ namespace BE.Controllers
             if (survey == null)
             {
                 return NotFound();
+            }
+
+            // Check if survey is closed (kiểm tra nếu khảo sát hết giờ => Đóng)
+            if (survey.EndAt < DateTime.Now)
+            {
+                return View("Closed", survey); // Alternatively, redirect to an error or information page (tạo trang thông báo lỗi)
             }
 
             // Process answers and save results
