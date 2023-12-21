@@ -17,6 +17,8 @@ public partial class SurveyProjectContext : DbContext
 
     public virtual DbSet<Award> Awards { get; set; }
 
+    public virtual DbSet<Contest> Contests { get; set; }
+
     public virtual DbSet<Faq> Faqs { get; set; }
 
     public virtual DbSet<FilledSurvey> FilledSurveys { get; set; }
@@ -31,11 +33,15 @@ public partial class SurveyProjectContext : DbContext
 
     public virtual DbSet<Question> Questions { get; set; }
 
+    public virtual DbSet<QuestionContest> QuestionContests { get; set; }
+
     public virtual DbSet<Support> Supports { get; set; }
 
     public virtual DbSet<Survey> Surveys { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<Winner> Winners { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("server=LAPTOP-PH1AFEK8\\SQLEXPRESS;database=SurveyProject;uid=sa;pwd=123;TrustServerCertificate=true");
@@ -59,6 +65,17 @@ public partial class SurveyProjectContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Awards)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__Award__UserId__628FA481");
+        });
+
+        modelBuilder.Entity<Contest>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Contest__3214EC0764BDAEA2");
+
+            entity.ToTable("Contest");
+
+            entity.Property(e => e.EndTime).HasColumnType("datetime");
+            entity.Property(e => e.StartTime).HasColumnType("datetime");
+            entity.Property(e => e.Title).HasMaxLength(255);
         });
 
         modelBuilder.Entity<Faq>(entity =>
@@ -146,6 +163,7 @@ public partial class SurveyProjectContext : DbContext
 
             entity.HasOne(d => d.Question).WithMany(p => p.Options)
                 .HasForeignKey(d => d.QuestionId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Option__Question__59063A47");
         });
 
@@ -180,7 +198,21 @@ public partial class SurveyProjectContext : DbContext
 
             entity.HasOne(d => d.Survey).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.SurveyId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Question__Survey__5629CD9C");
+        });
+
+        modelBuilder.Entity<QuestionContest>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Question__3214EC07E40A4E56");
+
+            entity.ToTable("QuestionContest");
+
+            entity.Property(e => e.CorrectAnswer).HasMaxLength(255);
+
+            entity.HasOne(d => d.Contest).WithMany(p => p.QuestionContests)
+                .HasForeignKey(d => d.ContestId)
+                .HasConstraintName("FK__QuestionC__Conte__04E4BC85");
         });
 
         modelBuilder.Entity<Support>(entity =>
@@ -263,6 +295,21 @@ public partial class SurveyProjectContext : DbContext
             entity.Property(e => e.UserName)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<Winner>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Winner__3214EC0749017F20");
+
+            entity.ToTable("Winner");
+
+            entity.HasOne(d => d.Contest).WithMany(p => p.Winners)
+                .HasForeignKey(d => d.ContestId)
+                .HasConstraintName("FK__Winner__ContestI__07C12930");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Winners)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__Winner__UserId__08B54D69");
         });
 
         OnModelCreatingPartial(modelBuilder);
