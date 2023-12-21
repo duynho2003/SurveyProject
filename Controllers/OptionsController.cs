@@ -62,7 +62,8 @@ namespace BE.Controllers
             {
                 _context.Add(option);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Display success alert using SweetAlert2
+                return Json(new { success = true });
             }
             ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Title", option.QuestionId);
             return View(option);

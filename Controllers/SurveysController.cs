@@ -90,12 +90,13 @@ namespace BE.Controllers
             {
                 _context.Add(survey);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Display success alert using SweetAlert2
+                return Json(new { success = true });
             }
             return View(survey);
         }
 
-        // GET: Surveys/Delete/5
+        // GET: Surveys/Delete/5 (Xóa lập tức ko cần chuyển trang)
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Surveys == null)
@@ -103,34 +104,54 @@ namespace BE.Controllers
                 return NotFound();
             }
 
-            var survey = await _context.Surveys
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (survey == null)
-            {
-                return NotFound();
-            }
-
-            return View(survey);
-        }
-
-        // POST: Surveys/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Surveys == null)
-            {
-                return Problem("Entity set 'SurveyProjectContext.Surveys'  is null.");
-            }
+            // Immediately delete the survey
             var survey = await _context.Surveys.FindAsync(id);
             if (survey != null)
             {
                 _context.Surveys.Remove(survey);
             }
-            
             await _context.SaveChangesAsync();
+
+            // trở về trang chủ
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: Surveys/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null || _context.Surveys == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var survey = await _context.Surveys
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (survey == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(survey);
+        //}
+
+        // POST: Surveys/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    if (_context.Surveys == null)
+        //    {
+        //        return Problem("Entity set 'SurveyProjectContext.Surveys'  is null.");
+        //    }
+        //    var survey = await _context.Surveys.FindAsync(id);
+        //    if (survey != null)
+        //    {
+        //        _context.Surveys.Remove(survey);
+        //    }
+            
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool SurveyExists(int id)
         {
