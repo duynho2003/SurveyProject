@@ -212,6 +212,7 @@ public partial class SurveyProjectContext : DbContext
 
             entity.HasOne(d => d.Contest).WithMany(p => p.QuestionContests)
                 .HasForeignKey(d => d.ContestId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__QuestionC__Conte__04E4BC85");
         });
 
