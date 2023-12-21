@@ -293,7 +293,7 @@
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          @* User Manager Pages *@
+          @*Category User Manager Pages *@
           <li class="nav-item nav-category">Accounts</li>
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
@@ -309,11 +309,11 @@
               </ul>
             </div>
           </li>
-          @* Surveys Pages *@
+          @* Category Surveys Pages *@
           <li class="nav-item nav-category">Surveys</li>
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#form-surveys" aria-expanded="false" aria-controls="form-elements">
-              <i class="menu-icon mdi mdi-card-text-outline"></i>
+              <i class="menu-icon mdi mdi-clipboard-text"></i>
               <span class="menu-title">Survey Management</span>
               <i class="menu-arrow"></i>
             </a>
@@ -338,7 +338,23 @@
               </ul>
             </div>
           </li>
-          @* Category Pages *@
+          @* Category Competition Pages *@
+          <li class="nav-item nav-category">Competition</li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#competition" aria-expanded="false" aria-controls="menu-title">
+              <i class="menu-icon mdi mdi-trophy-award"></i>
+              <span class="menu-title">Competition Management</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="competition">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="Contests" asp-action="Index">Competitions</a></li>
+                <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="QuestionContests" asp-action="Index">Questions</a></li>
+                <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="QuestionContests" asp-action="Create">Create</a></li>
+              </ul>
+            </div>
+          </li>
+          @* Category Others Pages *@
           <li class="nav-item nav-category">Others</li>
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#news" aria-expanded="false" aria-controls="menu-title">
@@ -355,7 +371,7 @@
           <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#faqs" aria-expanded="false" aria-controls="faqs">
               <i class="menu-icon mdi mdi-frequently-asked-questions"></i>
-              <span class="menu-title">FAQS</span>
+              <span class="menu-title">FAQs</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="faqs">

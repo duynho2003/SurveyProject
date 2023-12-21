@@ -95,18 +95,6 @@ namespace BE.Controllers
             return View(survey);
         }
 
-        //public async Task<IActionResult> Create([Bind("Id,Title,UserType,Form,UserPost,CreatedAt,EndAt")] Survey survey)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(survey);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(survey);
-        //}
-
-
         // GET: Surveys/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
