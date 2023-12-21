@@ -19,7 +19,9 @@ public partial class Survey
     public DateTime? CreatedAt { get; set; }
     [DisplayName("End Date")]
     public DateTime? EndAt { get; set; }
-    
+
+    public bool? IsVisible { get; set; }
+
     public virtual ICollection<Award> Awards { get; set; } = new List<Award>();
 
     public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
