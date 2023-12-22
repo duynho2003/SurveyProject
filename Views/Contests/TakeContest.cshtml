@@ -1,7 +1,51 @@
 ﻿@model BE.Models.Contest
-
 @{
-    ViewData["Title"] = "Take Contest: " + Model.Title;
+    ViewData["Title"] = "Take Contest";
 }
+<h2>Take Contest</h2>
 
-<h1>Take Contest: @Model.Title</h1>
+@if (Model == null)
+{
+    <p>Contest not found</p>
+}
+else
+{
+    <p>Contest Title: @Model.Title</p>
+@*     <p>Contest Description: @Model.Description</p> *@
+
+    @if (Model.QuestionContests != null)
+    {
+        using (Html.BeginForm("TakeContest", "Contests", FormMethod.Post))
+        {
+            <p>@ViewBag.Count</p>
+            <form asp-action="TakeContest" method="post">
+                @Html.HiddenFor(model => model.Id) <!-- Hidden field to pass the contest ID -->
+                @foreach (var question in Model.QuestionContests)
+                {
+                <h4>@question.QuestionText</h4>
+
+                if (question.AnswerOptions != null)
+                {
+                foreach (var option in question.AnswerOptions)
+                {
+                <div>
+                    <input type="radio" name="selectedOptions[@question.Id]" value="@option" />
+                    <label>@option</label>
+                </div>
+                }
+                }
+                else
+                {
+                <p>No answer options available for this question.</p>
+                }
+                }
+
+                <button type="submit">Submit</button>
+            </form>
+        }
+    }
+    else
+    {
+        <p>No questions available for this contest.</p>
+    }
+}
