@@ -248,7 +248,6 @@ namespace BE.Controllers
                         IsCorrect = isCorrect
                     });
                 }
-             
             }
             // Nếu không có câu trả lời nào được chọn hoặc không có câu trả lời nào đúng
             //return View(contest);
