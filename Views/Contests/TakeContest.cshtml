@@ -28,9 +28,13 @@ else
                 {
                 foreach (var option in question.AnswerOptions)
                 {
-                <div>
-                    <input type="radio" name="selectedOptions[@question.Id]" value="@option" />
-                    <label>@option</label>
+                <div class="col-sm-5">
+                    <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" name="selectedOptions[@question.Id]" value="@option" />
+                        @option
+                    </label>
+                    </div>
                 </div>
                 }
                 }
@@ -39,8 +43,7 @@ else
                 <p>No answer options available for this question.</p>
                 }
                 }
-
-                <button type="submit">Submit</button>
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
             </form>
         }
     }
