@@ -43,7 +43,7 @@ else
                 <p>No answer options available for this question.</p>
                 }
                 }
-                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <button type="submit" class="btn btn-primary me-2 submit-contest">Submit</button>
             </form>
         }
     }
@@ -51,4 +51,29 @@ else
     {
         <p>No questions available for this contest.</p>
     }
+}
+@section Scripts {
+    <script>
+        $(function () {
+            $('.submit-contest').click(function (event) {
+                // Prevent the default form submission behavior
+                event.preventDefault();
+                // Use SweetAlert2 for confirmation
+                Swal.fire({
+                    title: 'Are you sure want to submit?',
+                    text: 'You won\'t be able to revert this!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, submit it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If user clicks 'Yes', submit the form programmatically
+                        $(this).closest('form').submit();
+                    }
+                });
+            });
+        });
+    </script>
 }
