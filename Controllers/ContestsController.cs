@@ -227,7 +227,7 @@ namespace BE.Controllers
                 return View("Closed", contest);
             }
 
-            var count = 0;
+            var results = new List<ResultViewModel>(); // Create a list to store results
 
             foreach (var question in contest.QuestionContests)
             {
@@ -238,17 +238,22 @@ namespace BE.Controllers
                 if (selectedOptions.TryGetValue(question.Id, out selectedOptionsForQuestion))
                 {
                     // So sánh câu trả lời đã chọn với câu trả lời đúng của câu hỏi
-                    if (selectedOptionsForQuestion != null && selectedOptionsForQuestion.Contains(correctAnswer))
+                    bool isCorrect = selectedOptionsForQuestion != null && selectedOptionsForQuestion.Contains(correctAnswer);
+
+                    // Add result to the list
+                    results.Add(new ResultViewModel
                     {
-                        count++;
-                    }
+                        QuestionText = question.QuestionText,
+                        UserAnswer = selectedOptionsForQuestion != null ? string.Join(", ", selectedOptionsForQuestion) : "No answer",
+                        IsCorrect = isCorrect
+                    });
                 }
              
             }
-            ViewBag.Count = "So cau trl dung la: " + count;
-
             // Nếu không có câu trả lời nào được chọn hoặc không có câu trả lời nào đúng
-            return View(contest);
+            //return View(contest);
+            // Pass the results to the Result view
+            return View("Result", results);
         }
 
 

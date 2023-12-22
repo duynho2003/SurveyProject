@@ -11,7 +11,7 @@ public partial class QuestionContest
 
     public string QuestionText { get; set; } = null!;
 
-    public string AnswerOptions { get; set; } = null!;
+    public List<string> AnswerOptions { get; set; } = new List<string>();
 
     public string CorrectAnswer { get; set; } = null!;
 
