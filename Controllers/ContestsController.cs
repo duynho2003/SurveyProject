@@ -154,40 +154,103 @@ namespace BE.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: /Contest/TakeContest/1
         public IActionResult TakeContest(int id)
         {
-            var survey = _context.Contests.Include(s => s.QuestionContests).ThenInclude(q => q.AnswerOptions).FirstOrDefault(s => s.Id == id);
-            if (survey == null)
+            var contest = _context.Contests
+                .Include(c => c.QuestionContests)
+                .FirstOrDefault(c => c.Id == id);
+
+            if (contest == null)
             {
                 return NotFound();
             }
-            // Check if survey is closed (kiểm tra nếu khảo sát hết giờ => Đóng)
-            if (survey.EndTime < DateTime.Now)
+
+            // Check if contest is closed
+            if (contest.EndTime < DateTime.Now)
             {
-                return View("Closed", survey); // Use a dedicated "Closed" view to inform users
+                return View("Closed", contest);
             }
-            return View(survey);
+
+            return View(contest);
         }
+
+        // POST: /Contest/TakeContest/1
+        //[HttpPost]
+        //public IActionResult TakeContest(int id, Dictionary<int, int> selectedOptions)
+        //{
+        //    var contest = _context.Contests.Find(id);
+
+        //    if (contest == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    // Check if contest is closed
+        //    if (contest.EndTime < DateTime.Now)
+        //    {
+        //        return View("Closed", contest);
+        //    }
+
+        //    // Process selected options and save results
+        //    // The selectedOptions dictionary contains questionId as the key and selected optionId as the value
+
+        //    // Example of processing and saving results
+        //    foreach (var kvp in selectedOptions)
+        //    {
+        //        var questionId = kvp.Key;
+        //        var selectedOptionId = kvp.Value;
+
+        //        // Perform your logic to save the selected option for each question
+        //        // This is just a placeholder, you need to implement your own saving logic
+        //        // For example, you might have a Result model to store user responses
+        //        // and you can save the user's response for each question in the database
+        //    }
+        //    return RedirectToAction(nameof(Index)); // Redirect to the contest index or another appropriate action
+        //}
 
         [HttpPost]
-        public IActionResult TakeContest(int id, List<int> answerIds)
+        public IActionResult TakeContest(int id, Dictionary<int, string[]> selectedOptions)
         {
-            var survey = _context.Contests.Find(id);
-            if (survey == null)
+            var contest = _context.Contests
+                .Include(c => c.QuestionContests)
+                .FirstOrDefault(c => c.Id == id);
+
+            if (contest == null)
             {
                 return NotFound();
             }
 
-            // Check if survey is closed (kiểm tra nếu khảo sát hết giờ => Đóng)
-            if (survey.EndTime < DateTime.Now)
+            // Check if contest is closed
+            if (contest.EndTime < DateTime.Now)
             {
-                return View("Closed", survey); // Alternatively, redirect to an error or information page (tạo trang thông báo lỗi)
+                return View("Closed", contest);
             }
 
-            // Process answers and save results
+            var count = 0;
 
-            return RedirectToAction(nameof(Index));
+            foreach (var question in contest.QuestionContests)
+            {
+                string correctAnswer = question.CorrectAnswer; // assuming CorrectAnswer is a string
+                string[] selectedOptionsForQuestion;
+
+                // Kiểm tra xem người dùng đã chọn câu trả lời cho câu hỏi này hay không
+                if (selectedOptions.TryGetValue(question.Id, out selectedOptionsForQuestion))
+                {
+                    // So sánh câu trả lời đã chọn với câu trả lời đúng của câu hỏi
+                    if (selectedOptionsForQuestion != null && selectedOptionsForQuestion.Contains(correctAnswer))
+                    {
+                        count++;
+                    }
+                }
+             
+            }
+            ViewBag.Count = "So cau trl dung la: " + count;
+
+            // Nếu không có câu trả lời nào được chọn hoặc không có câu trả lời nào đúng
+            return View(contest);
         }
+
 
         private bool ContestExists(int id)
         {
